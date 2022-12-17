@@ -1,0 +1,21 @@
+{
+    "name": "micrositios/names",
+    "license": [
+        "GPL-3.0-or-later"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Micrositios\\Names\\App\\": "src/"
+        }
+    },
+    "authors": [{
+        "name": "Leonardo Forero Sandoval",
+        "email": "gerencia@micrositios.net",
+        "homepage": "https://www.micrositios.net",
+        "role": "Architect and Developer"
+    }],
+    "require": {
+        "voku/portable-ascii": "^2.0",
+        "voku/portable-utf8": "^6.0"
+    }
+}
