@@ -38,7 +38,7 @@ class SplitName
 
         $keys = Term::groupBy('type')->get()->pluck('type');
 
-        dump($keys);
+        var_dump($keys);
 
         $cleanName = $this->cleaner->clean($fullName);
         $this->isChanged = $cleanName !== $fullName;
