@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Micrositios\Names\App;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Micrositios\Names\App\Models\Term;
-
+use Micrositios\Names\App\migrations\Load;
+use Micrositios\Names\App\migrations\Term;
 
 class SplitName
 {
@@ -36,10 +36,6 @@ class SplitName
     public function split(string $fullName): array
     {
 
-        $keys = Term::groupBy('type')->get()->pluck('type');
-
-        var_dump($keys);
-
         $cleanName = $this->cleaner->clean($fullName);
         $this->isChanged = $cleanName !== $fullName;
         $tokenizedName = $this->tokenizer->tokenize($cleanName);
@@ -49,5 +45,10 @@ class SplitName
     public function getIsChanged(): bool
     {
         return $this->isChanged;
+    }
+    public function init(): void
+    {
+        $t = new Load();
+        $t->loadTerms();
     }
 }

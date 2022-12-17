@@ -1,0 +1,27 @@
+<?php
+
+$terms['F'] = [
+    'adriana',
+    'elizabeth',
+    'fernanda',
+    'francisca',
+    'giovana',
+    'giovana',
+    'giovanna',
+    'graciela',
+    'helena',
+    'juliana',
+    'laura',
+    'leidy',
+    'liceth',
+    'lucrecia',
+    'luz',
+    'marcela',
+    'margarita',
+    'maria',
+    'maría',
+    'ofelia',
+    'pilar',
+    'sandra',
+    'viviana',
+];
