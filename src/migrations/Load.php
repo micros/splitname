@@ -13,10 +13,10 @@ class Load
     {
         new TermMigration();
 
-        include_once 'src/database/male.php';
-        include_once 'src/database/female.php';
-        include_once 'src/database/last.php';
-        include_once 'src/database/conector.php';
+        include_once __DIR__ . "/../database/male.php";
+        include_once __DIR__ . "/../database/female.php";
+        include_once __DIR__ . "/../database/last.php";
+        include_once __DIR__ . "/../database/conector.php";
 
         foreach ($terms as $key => $list) {
             foreach ($list as $term) {
