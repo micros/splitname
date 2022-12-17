@@ -13,8 +13,10 @@ final class Tagger
     {
         $fixedParts = [];
         foreach ($parts as $part) {
-            if ($type = $this->searchByTerm($this->cleanPart($part), $terms)) {
-                $fixedParts[] = [$part, $this->cleanPart($part), $type];
+            $original = $part;
+            $part = $this->cleanPart($part);
+            if ($type = $this->searchByTerm($part, $terms)) {
+                $fixedParts[] = [$original, $part, $type];
             }
         }
         return $fixedParts;

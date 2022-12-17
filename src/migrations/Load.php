@@ -6,6 +6,7 @@ namespace Micros\Names\App\migrations;
 
 use Micros\Names\App\migrations\TermMigration;
 use Micros\Names\App\Models\Term;
+use voku\helper\ASCII;
 
 class Load
 {
@@ -26,9 +27,9 @@ class Load
                     $k = 'N';
                     $gender = $key;
                 }
-                if (!Term::where('term', $term)->where('type', $k)->exists()) {
+                if (!Term::where('term', $this->cleanPart($term))->where('type', $k)->exists()) {
                     $t = new Term();
-                    $t->term = $term;
+                    $t->term = $this->cleanPart($term);
                     $t->gender = $key;
                     $t->type = $k;
                     $t->gender = $gender;
@@ -36,5 +37,12 @@ class Load
                 }
             }
         }
+    }
+    private function cleanPart(string $part): string
+    {
+        $part = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑ ]/", '', $part);
+        $part = ASCII::to_transliterate($part);
+        $part = mb_strtolower($part, 'UTF-8');
+        return $part;
     }
 }
