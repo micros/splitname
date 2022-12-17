@@ -2,7 +2,6 @@
     "name": "micros/splitname",
     "description": "Split spanish names into four components: first name, other names, last name, other last names",
     "type": "library",
-    "minimum-stability": "stable",
     "license": [
         "GPL-3.0-or-later"
     ],
