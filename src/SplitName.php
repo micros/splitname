@@ -6,7 +6,7 @@ namespace Micros\Names\App;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Micros\Names\App\migrations\Load;
-use Micros\Names\App\migrations\Term;
+use Micros\Names\App\Models\Term;
 
 class SplitName
 {
@@ -14,6 +14,7 @@ class SplitName
     private $tokenizer;
     private $tagger;
     public $isChanged = false;
+    public $terms;
     public function __construct()
     {
         $this->cleaner = new NameCleaner();
@@ -32,14 +33,14 @@ class SplitName
         $capsule->setAsGlobal();
 
         $capsule->bootEloquent();
+        $this->terms = Term::all()->toArray();
     }
     public function split(string $fullName): array
     {
-
         $cleanName = $this->cleaner->clean($fullName);
         $this->isChanged = $cleanName !== $fullName;
         $tokenizedName = $this->tokenizer->tokenize($cleanName);
-        $parts = $this->tagger->tag($tokenizedName);
+        $parts = $this->tagger->tag($tokenizedName, $this->terms);
         return $parts;
     }
     public function getIsChanged(): bool
