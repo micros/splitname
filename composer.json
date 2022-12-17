@@ -8,13 +8,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Micrositios\\Names\\App\\": "src/"
+            "Micros\\Names\\App\\": "src/"
         }
     },
     "authors": [{
         "name": "Leonardo Forero Sandoval",
-        "email": "gerencia@micrositios.net",
-        "homepage": "https://www.micrositios.net",
+        "email": "gerencia@Micros.net",
+        "homepage": "https://www.Micros.net",
         "role": "Architect and Developer"
     }],
     "require": {

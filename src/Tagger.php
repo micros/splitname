@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Micrositios\Names\App;
+namespace Micros\Names\App;
 
 use voku\helper\ASCII;
 

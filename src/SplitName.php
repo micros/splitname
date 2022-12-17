@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Micrositios\Names\App;
+namespace Micros\Names\App;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Micrositios\Names\App\migrations\Load;
-use Micrositios\Names\App\migrations\Term;
+use Micros\Names\App\migrations\Load;
+use Micros\Names\App\migrations\Term;
 
 class SplitName
 {

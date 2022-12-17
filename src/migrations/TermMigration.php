@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Micrositios\Names\App\migrations;
+namespace Micros\Names\App\migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Micrositios\Names\App\migrations;
+namespace Micros\Names\App\migrations;
 
-use Micrositios\Names\App\migrations\TermMigration;
-use Micrositios\Names\App\Models\Term;
+use Micros\Names\App\migrations\TermMigration;
+use Micros\Names\App\Models\Term;
 
 class Load
 {

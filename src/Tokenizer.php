@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Micrositios\Names\App;
+namespace Micros\Names\App;
 
-use Micrositios\Names\App\Models\Term;
+use Micros\Names\App\Models\Term;
 
 final class Tokenizer
 {
