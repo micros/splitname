@@ -17,6 +17,7 @@ class TermMigration
             $table->string('term');
             $table->string('type');
             $table->string('gender')->nullable();
+            $table->string('canonical')->nullable();
             $table->timestamps(6);
             $table->unique(['term', 'type']);
         });

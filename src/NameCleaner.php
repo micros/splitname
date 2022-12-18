@@ -15,6 +15,10 @@ final class NameCleaner
 {
     public function clean(string $fullName): string
     {
+        // Separate punctuation from names
+        $needles = ['.', ',', ';', ':', '(', ')', '"', "'"];
+        // $replacements = [' . ', ' , ', ' ; ', ' : ', ' ( ', ' ) ', ' " ', " ' "];
+        $fullName = str_replace($needles, '', $fullName);
         // Remove duplicate spaces, tabs and new lines
         $fullName = trim(preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $fullName));
         // Remove non printable characters

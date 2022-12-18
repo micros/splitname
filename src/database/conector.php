@@ -10,4 +10,5 @@ $terms['C'] = [
     'los',
     'vda',
     'viuda',
+    'y',
 ];

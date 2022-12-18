@@ -27,12 +27,15 @@ class Load
                     $k = 'N';
                     $gender = $key;
                 }
-                if (!Term::where('term', $this->cleanPart($term))->where('type', $k)->exists()) {
+                $cleanTerm = $this->cleanPart($term);
+                // Since the relation term, key is unique
+                if (!Term::where('term', $cleanTerm)->where('type', $k)->exists()) {
                     $t = new Term();
-                    $t->term = $this->cleanPart($term);
+                    $t->term = $cleanTerm;
                     $t->gender = $key;
                     $t->type = $k;
                     $t->gender = $gender;
+                    $t->canonical = $term;
                     $t->save();
                 }
             }

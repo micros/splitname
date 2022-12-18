@@ -51,5 +51,6 @@ class SplitName
     {
         $t = new Load();
         $t->loadTerms();
+        $this->terms = Term::all()->toArray();
     }
 }

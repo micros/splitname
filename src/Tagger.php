@@ -12,29 +12,41 @@ final class Tagger
     public function tag(array $parts, $terms): array
     {
         $fixedParts = [];
+
         foreach ($parts as $part) {
             $original = $part;
-            $part = $this->cleanPart($part);
-            if ($type = $this->searchByTerm($part, $terms)) {
-                $fixedParts[] = [$original, $part, $type];
+            $part = $this->cleanTerm($part);
+
+            $type = 'X';
+            $tmp = $this->searchTerm($part, $terms);
+            if (count($tmp) === 1) {
+                $type = $tmp[0];
             }
+            if (count($tmp) > 1) {
+                $type = 'Z';
+            }
+            if ($type === 'X' && strlen($part) === 1 && ctype_alpha($part)) {
+                $type = 'I';
+            }
+            $fixedParts[] = [$original, $part, $type];
         }
         return $fixedParts;
     }
-    private function cleanPart(string $part): string
+    private function cleanTerm(string $value): string
     {
-        $part = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑ ]/", '', $part);
-        $part = ASCII::to_transliterate($part);
-        $part = mb_strtolower($part, 'UTF-8');
-        return $part;
+        $value = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑ ]/", '', $value);
+        $value = ASCII::to_transliterate($value);
+        $value = mb_strtolower($value, 'UTF-8');
+        return $value;
     }
-    private function searchByTerm($id, $array)
+    private function searchTerm($value, $array): array
     {
-        foreach ($array as $key => $val) {
-            if ($val['term'] === $id) {
-                return $val['type'];
+        $type = [];
+        foreach ($array as $val) {
+            if ($val['term'] === $value) {
+                $type[] = $val['type'];
             }
         }
-        return null;
+        return $type;
     }
 }
