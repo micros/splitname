@@ -8,23 +8,29 @@ final class Compacter
 {
     public function compact(array $values): array
     {
-        if (!in_array('C', array_column($values, 'type'))) {
+        $compactablesTypes = ['C', 'I'];
+
+        if (!array_intersect($compactablesTypes, array_column($values, 'type'))) {
             return $values;
         }
 
-        $prev = null;
-        $newValues = [];
-        foreach ($values as $value) {
-            if ($prev === 'C' && $value['type'] === 'C') {
-                $index = count($newValues) - 1;
-                $original = $values[$index]['original'] . ' ' . $value['original'];
-                $modified = $values[$index]['modified'] . ' ' . $value['modified'];
-                $newValues[$index] = ['original' => $original, 'modified' => $modified, 'type' => $value['type']];
-            } else {
-                $newValues[] = ['original' => $value['original'], 'modified' => $value['modified'], 'type' => $value['type']];
+        foreach ($compactablesTypes as $compactableType) {
+            $prev = null;
+            $newValues = [];
+            foreach ($values as $value) {
+                if ($prev === $compactableType && $value['type'] === $compactableType) {
+                    $index = count($newValues) - 1;
+                    $original = $values[$index]['original'] . ' ' . $value['original'];
+                    $modified = $values[$index]['modified'] . ' ' . $value['modified'];
+                    $newValues[$index] = ['original' => $original, 'modified' => $modified, 'type' => $value['type']];
+                } else {
+                    $newValues[] = ['original' => $value['original'], 'modified' => $value['modified'], 'type' => $value['type']];
+                }
+                $prev = $value['type'];
             }
-            $prev = $value['type'];
+            $values = $newValues;
         }
-        return $newValues;
+
+        return $values;
     }
 }
