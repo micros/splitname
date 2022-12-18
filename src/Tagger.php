@@ -28,7 +28,7 @@ final class Tagger
             if ($type === 'X' && strlen($part) === 1 && ctype_alpha($part)) {
                 $type = 'I';
             }
-            $fixedParts[] = [$original, $part, $type];
+            $fixedParts[] = ['original' => $original, 'modified' => $part, 'type' => $type];
         }
         return $fixedParts;
     }

@@ -13,6 +13,7 @@ class SplitName
     private $cleaner;
     private $tokenizer;
     private $tagger;
+    private $compacter;
     public $isChanged = false;
     public $terms;
     public function __construct()
@@ -20,6 +21,7 @@ class SplitName
         $this->cleaner = new NameCleaner();
         $this->tokenizer = new Tokenizer();
         $this->tagger = new Tagger();
+        $this->compacter = new Compacter();
 
         $capsule = new Capsule;
 
@@ -40,8 +42,9 @@ class SplitName
         $cleanName = $this->cleaner->clean($fullName);
         $this->isChanged = $cleanName !== $fullName;
         $tokenizedName = $this->tokenizer->tokenize($cleanName);
-        $parts = $this->tagger->tag($tokenizedName, $this->terms);
-        return $parts;
+        $taggedName = $this->tagger->tag($tokenizedName, $this->terms);
+        $compactedName = $this->compacter->compact($taggedName);
+        return $compactedName;
     }
     public function getIsChanged(): bool
     {
