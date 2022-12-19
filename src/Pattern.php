@@ -8,12 +8,15 @@ final class Pattern
 {
     private $sustitutionRules = [
         'LXNX' => 'LLNN',
+        'NCNX' => 'NCNL',
         'NCLCX' => 'NCLCL',
         'NCLXL' => 'NCLCL',
         'NCNLCX' => 'NCNLCL',
         'NCNLXL' => 'NCNLCL',
         'NCNXCL' => 'NCNLCL',
         'NCX' => 'NCL',
+        'NCXL' => 'NCNL',
+        'NCXX' => 'NCNL',
         'NCXCL' => 'NCNCL',
         'NCXLCL' => 'NCNLCL',
         'NCXLX' => 'NCNLL',

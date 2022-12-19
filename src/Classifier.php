@@ -26,6 +26,8 @@ final class Classifier
         'NNL' => '123',
         'NNLL' => '1234',
         'NNNL' => '1223',
+        'NLLCL' => '13444',
+        'NNLCL' => '12344',
 
         'L' => '3',
         'LL' => '34',
