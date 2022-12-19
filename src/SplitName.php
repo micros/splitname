@@ -14,6 +14,7 @@ class SplitName
     private $tokenizer;
     private $tagger;
     private $compacter;
+    private $classifier;
     public $isChanged = false;
     public $terms;
     public function __construct()
@@ -22,6 +23,7 @@ class SplitName
         $this->tokenizer = new Tokenizer();
         $this->tagger = new Tagger();
         $this->compacter = new Compacter();
+        $this->classifier = new Classifier();
 
         $capsule = new Capsule;
 
@@ -39,16 +41,13 @@ class SplitName
     }
     public function split(string $fullName): array
     {
-        $cleanName = $this->cleaner->clean($fullName);
-        $this->isChanged = $cleanName !== $fullName;
-        $tokenizedName = $this->tokenizer->tokenize($cleanName);
+        $cleanedName = $this->cleaner->clean($fullName);
+        $this->isChanged = $cleanedName !== $fullName;
+        $tokenizedName = $this->tokenizer->tokenize($cleanedName);
         $taggedName = $this->tagger->tag($tokenizedName, $this->terms);
         $compactedName = $this->compacter->compact($taggedName);
-        return $compactedName;
-    }
-    public function getIsChanged(): bool
-    {
-        return $this->isChanged;
+        $classes = $this->classifier->classify($compactedName);
+        return $classes;
     }
     public function init(): void
     {
