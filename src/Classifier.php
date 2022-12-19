@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Micros\Names\App;
 
+use Micros\Names\App\Models\Term;
+
 final class Classifier
 {
     private $rules = [
         'N' => '1',
         'NN' => '12',
         'NCL' => '133',
+        'NNCL' => '1233',
         'NCLL' => '1334',
         'NCNL' => '1223',
         'NCNLL' => '12234',
         'NCLCL' => '13344',
         'NCNLCL' => '122344',
+        'NNCLCL' => '123344',
+        'NNCNLL' => '122234',
         'NL' => '13',
         'NLCL' => '1344',
         'NLL' => '134',
@@ -32,88 +37,26 @@ final class Classifier
         'LLN' => '341',
         'LLNN' => '3412',
     ];
-
-    private $sustitutionRules = [
-        'NCX' => 'NCL',
-        'NIL' => 'NNL',
-        'NILI' => 'NNLL',
-        'NLI' => 'NLL',
-        'NLN' => 'NLL',
-        'NLX' => 'NLL',
-        'NLXL' => 'NLCL',
-        'NNLX' => 'NNLL',
-        'NNX' => 'NNL',
-        'NNXL' => 'NNLL',
-        'NNXX' => 'NNLL',
-        'NX' => 'NL',
-        'NXL' => 'NLL',
-        'NXLL' => 'NNLL',
-        'NXLX' => 'NNLL',
-        'NXLN' => 'NNLL',
-        'NXX' => 'NLL',
-        'NXXL' => 'NNLL',
-        'NXXX' => 'NNLL',
-        'NZ' => 'NL',
-        'XCNXX' => 'NCNLL',
-        'XCX' => 'NCL',
-        'XCXXX' => 'NCNLL',
-        'XL' => 'NL',
-        'XLCL' => 'NLCL',
-        'XLX' => 'NLL',
-        'XNL' => 'NNL',
-        'XNLI' => 'NNLL',
-        'XNLL' => 'NNLL',
-        'XNX' => 'NNL',
-        'XNXL' => 'NNLL',
-        'XNXX' => 'NNLL',
-        'XX' => 'NL',
-        'XXL' => 'NNL',
-        'XLL' => 'NLL',
-        'XXLL' => 'NNLL',
-        'XXLX' => 'NNLL',
-        'XXX' => 'NNL',
-        'XXXL' => 'NNLL',
-        'XXXX' => 'NNLL',
-        'XZ' => 'NL',
-        'ZIL' => 'NNL',
-        'ZL' => 'NL',
-        'ZX' => 'NL',
-        'ZZL' => 'NNL',
-        'XCNLCL' => 'NCNLCL',
-        'NXNLCL' => 'NCNLCL',
-        'NCXLCL' => 'NCNLCL',
-        'NCNXCL' => 'NCNLCL',
-        'NCNLXL' => 'NCNLCL',
-        'NCNLCX' => 'NCNLCL',
-        'XCLCL' => 'NCLCL',
-        'NCXCL' => 'NCNCL',
-        'NCLXL' => 'NCLCL',
-        'NCLCX' => 'NCLCL',
-        'NCXLX' => 'NCNLL',
-        'LXNX' => 'LLNN',
-    ];
-
-    public function classify(array $values): array
+    public function classify(array $values, string $pattern): ?array
     {
-        $pattern = $this->getPattern($values);
-
-        if (array_key_exists($pattern, $this->sustitutionRules)) {
-            $pattern = $this->sustitutionRules[$pattern];
-        }
-
-        $nm['PN'] = null;
-        $nm['SN'] = null;
-        $nm['PA'] = null;
-        $nm['SA'] = null;
 
         if (array_key_exists($pattern, $this->rules)) {
             $v = str_split($this->rules[$pattern]);
+
+            $nm['PN'] = null;
+            $nm['SN'] = null;
+            $nm['PA'] = null;
+            $nm['SA'] = null;
+            $nm['gender'] = null;
+
             foreach ($v as $key => $value) {
                 if ($value === '1') {
                     $nm['PN'] = trim($nm['PN'] . ' ' . $values[$key]['original']);
+                    $nm['gender'] = $nm['gender'] ?? Term::where('term', $values[$key]['modified'])->where('type', 'N')->first()?->gender;
                 }
                 if ($value === '2') {
                     $nm['SN'] = trim($nm['SN'] . ' ' . $values[$key]['original']);
+                    $nm['gender'] = $nm['gender'] ?? Term::where('term', $values[$key]['modified'])->where('type', 'N')->first()?->gender;
                 }
                 if ($value === '3') {
                     $nm['PA'] = trim($nm['PA'] . ' ' . $values[$key]['original']);
@@ -123,7 +66,7 @@ final class Classifier
                 }
             }
         }
-        return $nm;
+        return $nm ?? null;
     }
     private function getPattern(array $values): string
     {

@@ -11,4 +11,7 @@ $terms['C'] = [
     'vda',
     'viuda',
     'y',
+    'san',
+    'santa',
+    'santísima',
 ];

@@ -34,7 +34,7 @@ final class Tagger
     }
     private function cleanTerm(string $value): string
     {
-        $value = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑ ]/", '', $value);
+        $value = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑüÜ ]/", '', $value);
         $value = ASCII::to_transliterate($value);
         $value = mb_strtolower($value, 'UTF-8');
         return $value;
