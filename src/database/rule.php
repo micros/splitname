@@ -1,9 +1,6 @@
 <?php
 
 $rules = [
-    // Nombres solos
-    'N' => '1',
-    'NN' => '12',
     // Nombres con un apellido
     'NL' => '13',
     'NNL' => '123',
@@ -54,8 +51,6 @@ $rules = [
     'NNNLLL' => '122344',
     'NNLCLL' => '123444',
 
-    'L' => '3',
-    'LL' => '34',
     'LCLN' => '3441',
     'LCLNN' => '34412',
     'LN' => '31',

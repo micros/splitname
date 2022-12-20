@@ -46,6 +46,22 @@ final class Compacter
         }
         $values = $tmpValues;
 
+        // Compactar todos los CN como N
+        $prev = null;
+        $tmpValues = [];
+        foreach ($values as $value) {
+            if ($value['type'] === 'N' && $prev === 'C') {
+                $index = count($tmpValues) - 1;
+                $original = $tmpValues[$index]['original'] . ' ' . $value['original'];
+                $modified = $tmpValues[$index]['modified'] . ' ' . $value['modified'];
+                $tmpValues[$index] = ['original' => $original, 'modified' => $modified, 'type' => $value['type']];
+            } else {
+                $tmpValues[] = ['original' => $value['original'], 'modified' => $value['modified'], 'type' => $value['type']];
+            }
+            $prev = $value['type'];
+        }
+        $values = $tmpValues;
+
         // Reemplazar el primer N => A y el primer L => B
         $flagA = null;
         $flagB = null;
@@ -80,7 +96,7 @@ final class Compacter
         }
         $values = $tmpValues;
 
-
+        // Devolver los valores de A y B a los originales
         $tmpValues = [];
         foreach ($values as $value) {
             if ($value['type'] === 'A') {
