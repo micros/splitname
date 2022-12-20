@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Micros\Names\App\migrations;
 
-use Micros\Names\App\migrations\TermMigration;
+use Micros\Names\App\migrations\RulesMigration;
+use Micros\Names\App\migrations\SustitutionsMigration;
+use Micros\Names\App\migrations\TermsMigration;
+use Micros\Names\App\Models\Rule;
+use Micros\Names\App\Models\Sustitution;
 use Micros\Names\App\Models\Term;
 use voku\helper\ASCII;
 
@@ -12,7 +16,7 @@ class Load
 {
     public function loadTerms()
     {
-        new TermMigration();
+        new TermsMigration();
 
         include_once __DIR__ . "/../database/male.php";
         include_once __DIR__ . "/../database/female.php";
@@ -41,9 +45,39 @@ class Load
             }
         }
     }
+    public function loadRules()
+    {
+        new RulesMigration();
+
+        include_once __DIR__ . "/../database/rule.php";
+
+        foreach ($rules as $rule => $distribution) {
+            if (!Rule::where('rule', $rule)->exists() && strlen($rule) === strlen($distribution)) {
+                $r = new Rule();
+                $r->rule = $rule;
+                $r->distribution = $distribution;
+                $r->save();
+            }
+        }
+    }
+    public function loadSustitutions()
+    {
+        new SustitutionsMigration();
+
+        include_once __DIR__ . "/../database/sustitution.php";
+
+        foreach ($sustitutions as $origin => $rule) {
+            if (!Sustitution::where('origin', $origin)->exists() && Rule::where('rule', $rule)->exists() && strlen($rule) === strlen($origin)) {
+                $r = new Sustitution();
+                $r->origin = $origin;
+                $r->rule = $rule;
+                $r->save();
+            }
+        }
+    }
     private function cleanPart(string $part): string
     {
-        $part = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑ ]/", '', $part);
+        $part = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑüÜ ]/", '', $part);
         $part = ASCII::to_transliterate($part);
         $part = mb_strtolower($part, 'UTF-8');
         return $part;

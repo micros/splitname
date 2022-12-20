@@ -8,7 +8,7 @@ final class Compacter
 {
     public function compact(array $values): array
     {
-        $compactables = ['C', 'I'];
+        $compactables = ['C'];
 
         if (!array_intersect($compactables, array_column($values, 'type'))) {
             return $values;
@@ -18,7 +18,8 @@ final class Compacter
         $prev = null;
         $tmpValues = [];
         foreach ($values as $value) {
-            if (in_array($value['type'], $compactables) && $value['type'] === $prev) {
+            // if (in_array($value['type'], $compactables) && $value['type'] === $prev) {
+            if (in_array($prev, $compactables)) {
                 $index = count($tmpValues) - 1;
                 $original = $tmpValues[$index]['original'] . ' ' . $value['original'];
                 $modified = $tmpValues[$index]['modified'] . ' ' . $value['modified'];

@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Micros\Names\App;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Support\Facades\DB;
 use Micros\Names\App\migrations\Load;
+use Micros\Names\App\Models\Rule;
+use Micros\Names\App\Models\Sustitution;
 use Micros\Names\App\Models\Term;
 
 class SplitName
@@ -19,6 +22,8 @@ class SplitName
     private $genderGuesser;
     public $isChanged = false;
     public $terms;
+    public $rules;
+    public $sustitutions;
     public function __construct()
     {
         $this->cleaner = new NameCleaner();
@@ -41,7 +46,14 @@ class SplitName
         $capsule->setAsGlobal();
 
         $capsule->bootEloquent();
+
+        if (!Capsule::schema()->hasTable('terms') || !Capsule::schema()->hasTable('rules') || !Capsule::schema()->hasTable('sustitutions')) {
+            $this->init();
+        }
+
         $this->terms = Term::all()->toArray();
+        $this->rules = Rule::get()->pluck('distribution', 'rule')->toArray();
+        $this->sustitutions = Sustitution::get()->pluck('rule', 'origin')->toArray();
     }
     public function split(string $fullName): array
     {
@@ -50,9 +62,9 @@ class SplitName
         $taggedName = $this->tagger->tag($tokenizedName, $this->terms);
         $compactedName = $this->compacter->compact($taggedName);
 
-        $patterns = $this->pattern->get($compactedName);
+        $patterns = $this->pattern->get($compactedName, $this->sustitutions);
 
-        $classified = $this->classifier->classify($compactedName, $patterns[1]);
+        $classified = $this->classifier->classify($compactedName, $patterns[1], $this->rules);
 
         if ($classified && !isset($classified['gender'])) {
             $classified['gender'] = $this->genderGuesser->guess($classified);
@@ -73,14 +85,11 @@ class SplitName
     {
         $t = new Load();
         $t->loadTerms();
+        $t->loadRules();
+        $t->loadSustitutions();
+
         $this->terms = Term::all()->toArray();
-    }
-    private function getPattern(array $values): string
-    {
-        $structure = '';
-        foreach ($values as $part) {
-            $structure .= $part['type'];
-        }
-        return $structure;
+        $this->rules = Rule::get()->pluck('distribution', 'rule')->toArray();
+        $this->sustitutions = Sustitution::get()->pluck('rule', 'origin')->toArray();
     }
 }

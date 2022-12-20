@@ -4,86 +4,50 @@ declare(strict_types=1);
 
 namespace Micros\Names\App;
 
+use Micros\Names\App\Models\Rule;
+
 final class Pattern
 {
-    private $sustitutionRules = [
-        'LXNX' => 'LLNN',
-        'NCNX' => 'NCNL',
-        'NCLCX' => 'NCLCL',
-        'NCLXL' => 'NCLCL',
-        'NCNLCX' => 'NCNLCL',
-        'NCNLXL' => 'NCNLCL',
-        'NCNXCL' => 'NCNLCL',
-        'NCX' => 'NCL',
-        'NCXL' => 'NCNL',
-        'NCXX' => 'NCNL',
-        'NCXCL' => 'NCNCL',
-        'NCXLCL' => 'NCNLCL',
-        'NCXLX' => 'NCNLL',
-        'NIL' => 'NNL',
-        'NILI' => 'NNLL',
-        'NLI' => 'NLL',
-        'NLN' => 'NLL',
-        'NLX' => 'NLL',
-        'NLXL' => 'NLCL',
-        'NNLI' => 'NNLL',
-        'NNLX' => 'NNLL',
-        'NNX' => 'NNL',
-        'NNXL' => 'NNLL',
-        'NNXX' => 'NNLL',
-        'NX' => 'NL',
-        'NXCX' => 'NNCL',
-        'NXL' => 'NLL',
-        'NXLL' => 'NNLL',
-        'NXLN' => 'NNLL',
-        'NXLX' => 'NNLL',
-        'NXNLCL' => 'NCNLCL',
-        'NXX' => 'NLL',
-        'NXXL' => 'NNLL',
-        'NXXX' => 'NNLL',
-        'XCL' => 'NCL',
-        'XCLCL' => 'NCLCL',
-        'XCNL' => 'NCNL',
-        'XCNLCL' => 'NCNLCL',
-        'XCNX' => 'NCNL',
-        'XCNXX' => 'NCNLL',
-        'XCX' => 'NCL',
-        'XCXLCL' => 'NCNLCL',
-        'XCXLL' => 'NCNLL',
-        'XCXXX' => 'NCNLL',
-        'XIL' => 'NNL',
-        'XL' => 'NL',
-        'XLCL' => 'NLCL',
-        'XLL' => 'NLL',
-        'XLX' => 'NLL',
-        'XNCL' => 'NNCL',
-        'XNCX' => 'NNCL',
-        'XNL' => 'NNL',
-        'XNLI' => 'NNLL',
-        'XNLL' => 'NNLL',
-        'XNX' => 'NNL',
-        'XNXL' => 'NNLL',
-        'XNXX' => 'NNLL',
-        'XX' => 'NL',
-        'XXCL' => 'NLCL',
-        'XXL' => 'NNL',
-        'XXLL' => 'NNLL',
-        'XXLX' => 'NNLL',
-        'XXX' => 'NNL',
-        'XXXL' => 'NNLL',
-        'XXXX' => 'NNLL',
-        'NNCXCX' => 'NNCLCL',
-        'NNCNXX' => 'NNCNLL',
-    ];
-    public function get(array $values): array
+    public function get(array $values, array $sustitutions): array
     {
         $pattern = $this->getPattern($values);
+
         $sustitution = str_replace('Z', 'X', $pattern);
 
-        if (array_key_exists($sustitution, $this->sustitutionRules)) {
-            $sustitution = $this->sustitutionRules[$sustitution];
+        if (array_key_exists($sustitution, $sustitutions)) {
+            $sustitution = $sustitutions[$sustitution];
         }
 
+        if (str_contains($sustitution, 'X')) {
+            $rules = Rule::whereRaw('LENGTH(rule) = ?', [strlen($sustitution)])->pluck('rule')->toArray();
+            $closer = -1;
+            $final = null;
+            foreach ($rules as $rule) {
+                // calculate the distance between the input word,
+                // and the current word
+                $lev = levenshtein($sustitution, $rule);
+
+                // check for an exact match
+                if ($lev == 0) {
+
+                    // closest word is this one (exact match)
+                    $final = $rule;
+                    $closer = 0;
+
+                    // break out of the loop; we've found an exact match
+                    break;
+                }
+
+                // if this distance is less than the next found shortest
+                // distance, OR if a next shortest word has not yet been found
+                if ($lev <= $closer || $closer < 0) {
+                    // set the closest match, and shortest distance
+                    $final  = $rule;
+                    $closer = $lev;
+                }
+            }
+            $sustitution = $final ?? $sustitution;
+        }
         return [$pattern, $sustitution];
     }
     private function getPattern(array $values): string

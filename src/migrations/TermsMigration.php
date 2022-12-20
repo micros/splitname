@@ -6,7 +6,7 @@ namespace Micros\Names\App\migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class TermMigration
+class TermsMigration
 {
     public function __construct()
     {
