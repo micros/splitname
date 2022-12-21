@@ -7,6 +7,7 @@ namespace Micros\Names\App\migrations;
 use Micros\Names\App\migrations\RulesMigration;
 use Micros\Names\App\migrations\SustitutionsMigration;
 use Micros\Names\App\migrations\TermsMigration;
+use Micros\Names\App\Models\Lesson;
 use Micros\Names\App\Models\Rule;
 use Micros\Names\App\Models\Sustitution;
 use Micros\Names\App\Models\Term;
@@ -72,6 +73,21 @@ class Load
                 $r->origin = $origin;
                 $r->rule = $rule;
                 $r->save();
+            }
+        }
+    }
+    public function loadLessons()
+    {
+        new LessonsMigration();
+
+        include_once __DIR__ . "/../database/lesson.php";
+
+        foreach ($lessons as $rule => $type) {
+            if (!Lesson::where('rule', $rule)->exists()) {
+                $l = new Lesson();
+                $l->rule = $rule;
+                $l->type = $type;
+                $l->save();
             }
         }
     }

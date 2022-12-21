@@ -10,7 +10,6 @@ class TermsMigration
 {
     public function __construct()
     {
-        Capsule::schema()->dropIfExists('sustitutions');
         Capsule::schema()->dropIfExists('terms');
 
         Capsule::schema()->create('terms', function ($table) {

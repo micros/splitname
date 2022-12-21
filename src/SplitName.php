@@ -24,6 +24,7 @@ class SplitName
     public $terms;
     public $rules;
     public $sustitutions;
+    public $init = false;
     public function __construct(array $settings = null)
     {
 
@@ -84,7 +85,15 @@ class SplitName
         $capsule->bootEloquent();
 
         if (!Capsule::schema()->hasTable('terms') || !Capsule::schema()->hasTable('rules') || !Capsule::schema()->hasTable('sustitutions')) {
-            $this->init();
+            $this->init = true;
+        }
+
+        if ($this->init) {
+            $t = new Load();
+            $t->loadTerms();
+            $t->loadRules();
+            $t->loadSustitutions();
+            $t->loadLessons();
         }
 
         $this->terms = Term::all()->toArray();
@@ -119,9 +128,6 @@ class SplitName
     }
     public function init(): void
     {
-        $t = new Load();
-        $t->loadTerms();
-        $t->loadRules();
-        $t->loadSustitutions();
+        $this->init = true;
     }
 }
