@@ -24,8 +24,9 @@ class SplitName
     public $terms;
     public $rules;
     public $sustitutions;
-    public function __construct()
+    public function __construct(array $settings = null)
     {
+
         $this->cleaner = new NameCleaner();
         $this->tokenizer = new Tokenizer();
         $this->tagger = new Tagger();
@@ -36,11 +37,46 @@ class SplitName
 
         $capsule = new Capsule;
 
+        // https://laracasts.com/discuss/channels/general-discussion/how-to-construct-illuminatedatabase-capsule-with-existing-pdo-connection
+        // $settings = array(
+        //     'driver' => 'mysql',
+        //     'host' => 'localhost',
+        //     'database' => 'database',
+        //     'username' =>'user',
+        //     'password' => 'password',
+        //     'collation' => 'utf8_general_ci',
+        //     'charset'   => 'utf8',
+        //     'strict'   => false,
+        //     'prefix' => '',
+        //     'foreign_key_constraints' => true,
+        // );
+
+        /**
+         * Default connection
+         */
+        if (!$settings) {
+            $settings['driver'] = 'sqlite';
+            $settings['database'] = __DIR__ . '/database/data.sqlite';
+            $settings['foreign_key_constraints'] = true;
+        }
+        /**
+         * Create the database if not exists. For sqlite only
+         */
+        if ($settings['driver'] === 'sqlite' && !file_exists($settings['database'])) {
+            fopen($settings['database'], 'w') or die("Can't create file" . $settings['database']);
+        }
+
         $capsule->addConnection([
-            "driver" => "sqlite",
-            "database" => __DIR__ . "/database/data.sqlite",
-            "prefix" => "",
-            'foreign_key_constraints' => true
+            'driver' => $settings['driver'],
+            'database' => $settings['database'],
+            'host' => isset($settings['host']) ? $settings['host'] : 'localhost',
+            'username' => isset($settings['username']) ? $settings['username'] : '',
+            'password' => isset($settings['password']) ? $settings['password'] : '',
+            'collation' => isset($settings['collation']) ? $settings['collation'] : 'utf8_general_ci',
+            'charset'   => isset($settings['charset']) ? $settings['charset'] : 'utf8',
+            'strict'   => isset($settings['strict']) ? $settings['strict'] : false,
+            'prefix' => isset($settings['prefix']) ? $settings['prefix'] : '',
+            'foreign_key_constraints' => isset($settings['foreign_key_constraints']) ? $settings['foreign_key_constraints'] : true,
         ], 'default');
 
         $capsule->setAsGlobal();
@@ -87,9 +123,5 @@ class SplitName
         $t->loadTerms();
         $t->loadRules();
         $t->loadSustitutions();
-
-        $this->terms = Term::all()->toArray();
-        $this->rules = Rule::get()->pluck('distribution', 'rule')->toArray();
-        $this->sustitutions = Sustitution::get()->pluck('rule', 'origin')->toArray();
     }
 }
