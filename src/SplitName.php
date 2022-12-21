@@ -76,7 +76,7 @@ class SplitName
             'charset'   => isset($settings['charset']) ? $settings['charset'] : 'utf8',
             'strict'   => isset($settings['strict']) ? $settings['strict'] : false,
             'prefix' => isset($settings['prefix']) ? $settings['prefix'] : '',
-            'foreign_key_constraints' => isset($settings['foreign_key_constraints']) ? $settings['foreign_key_constraints'] : true,
+            'foreign_key_constraints' => true,
         ], 'default');
 
         $capsule->setAsGlobal();

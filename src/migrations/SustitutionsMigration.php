@@ -17,6 +17,7 @@ class SustitutionsMigration
             $table->string('origin')->unique();
             $table->string('rule');
             $table->timestamps(6);
+            $table->foreign('rule')->references('rule')->on('rules')->onDelete('cascade');
         });
     }
 }
