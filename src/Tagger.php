@@ -5,17 +5,23 @@ declare(strict_types=1);
 namespace Micros\Names\App;
 
 use Micros\Names\App\Models\Term;
+use Micros\Names\App\PartCleaner;
 use voku\helper\ASCII;
 
 final class Tagger
 {
+    private $partCleaner;
+    public function __construct()
+    {
+        $this->partCleaner = new PartCleaner();
+    }
     public function tag(array $parts, $terms): array
     {
         $fixedParts = [];
 
         foreach ($parts as $part) {
             $original = $part;
-            $part = $this->cleanTerm($part);
+            $part = $this->partCleaner->clean($part);
 
             $type = 'X';
             $tmp = $this->searchTerm($part, $terms);
@@ -31,13 +37,6 @@ final class Tagger
             $fixedParts[] = ['original' => $original, 'modified' => $part, 'type' => $type];
         }
         return $fixedParts;
-    }
-    private function cleanTerm(string $value): string
-    {
-        $value = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑüÜ ]/", '', $value);
-        $value = ASCII::to_transliterate($value);
-        $value = mb_strtolower($value, 'UTF-8');
-        return $value;
     }
     private function searchTerm($value, $array): array
     {

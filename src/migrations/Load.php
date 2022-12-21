@@ -11,10 +11,17 @@ use Micros\Names\App\Models\Lesson;
 use Micros\Names\App\Models\Rule;
 use Micros\Names\App\Models\Sustitution;
 use Micros\Names\App\Models\Term;
+use Micros\Names\App\PartCleaner;
 use voku\helper\ASCII;
 
 class Load
 {
+    private $partCleaner;
+    public function __construct()
+    {
+        $this->partCleaner = new PartCleaner();
+    }
+
     public function loadTerms()
     {
         new TermsMigration();
@@ -32,7 +39,7 @@ class Load
                     $k = 'N';
                     $gender = $key;
                 }
-                $cleanTerm = $this->cleanPart($term);
+                $cleanTerm = $this->partCleaner->clean($term);
                 // Since the relation [term, key] is unique
                 if (!Term::where('term', $cleanTerm)->where('type', $k)->exists()) {
                     $t = new Term();
@@ -90,12 +97,5 @@ class Load
                 $l->save();
             }
         }
-    }
-    private function cleanPart(string $part): string
-    {
-        $part = preg_replace("/[^A-Za-záéíóúÁÉÍÓÚñÑüÜ ]/", '', $part);
-        $part = ASCII::to_transliterate($part);
-        $part = mb_strtolower($part, 'UTF-8');
-        return $part;
     }
 }
