@@ -32,7 +32,7 @@ class Load
                     $gender = $key;
                 }
                 $cleanTerm = $this->cleanPart($term);
-                // Since the relation term, key is unique
+                // Since the relation [term, key] is unique
                 if (!Term::where('term', $cleanTerm)->where('type', $k)->exists()) {
                     $t = new Term();
                     $t->term = $cleanTerm;
