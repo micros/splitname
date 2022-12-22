@@ -10,7 +10,7 @@ final class Pattern
 {
     public function get(array $values, array $sustitutions): array
     {
-        $pattern = $this->getPattern($values);
+        $pattern = $this->loadPattern($values);
 
         $sustitution = str_replace('Z', 'X', $pattern);
 
@@ -50,7 +50,7 @@ final class Pattern
         }
         return [$pattern, $sustitution];
     }
-    private function getPattern(array $values): string
+    private function loadPattern(array $values): string
     {
         $pattern = '';
         foreach ($values as $part) {
