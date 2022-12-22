@@ -6,14 +6,20 @@ namespace Micros\Names\App;
 
 class GenderGuesser
 {
+    /**
+     * Very very very rudimentary function for guess the gender
+     * Please improve
+     * @param array $nm
+     * @return string
+     */
     public function guess(array $nm): string
     {
         $gender = null;
-        $male = ['o', 'e'];
-        $female = ['a', 'i', 'u'];
+        $male = ['o', 'l', 'n', 's'];
+        $female = ['a'];
 
-        if (array_key_exists('PN', $nm) && isset($nm['PN'])) {
-            $test = substr($nm['PN'], -1);
+        if (array_key_exists('first-name', $nm) && isset($nm['first-name'])) {
+            $test = substr($nm['first-name'], -1);
             if (in_array($test, $male)) {
                 $gender = 'M';
             }
@@ -22,8 +28,8 @@ class GenderGuesser
             }
         }
 
-        if (!$gender && array_key_exists('SN', $nm) && isset($nm['SN'])) {
-            $test = substr($nm['SN'], -1);
+        if (!$gender && array_key_exists('middle-name', $nm) && isset($nm['middle-name'])) {
+            $test = substr($nm['middle-name'], -1);
             if (in_array($test, $male)) {
                 $gender = 'M';
             }
@@ -32,6 +38,6 @@ class GenderGuesser
             }
         }
 
-        return $gender ?? 'I';
+        return $gender ?? 'U'; // Gender or undefined
     }
 }

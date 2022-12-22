@@ -96,7 +96,7 @@ class SplitName
             $t->loadLessons();
         }
 
-        $this->terms = Term::all()->toArray();
+        $this->terms = Term::get()->toArray();
         $this->rules = Rule::get()->pluck('distribution', 'rule')->toArray();
         $this->sustitutions = Sustitution::get()->pluck('rule', 'origin')->toArray();
     }
