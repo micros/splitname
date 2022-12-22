@@ -15,9 +15,9 @@ final class Classifier
             $v = str_split($rules[$pattern]);
 
             $nm['first-name'] = null;
-            $nm['other-names'] = null;
-            $nm['last-name'] = null;
-            $nm['other-last-names'] = null;
+            $nm['middle-name'] = null;
+            $nm['surname'] = null;
+            $nm['other-surnames'] = null;
             $nm['gender'] = null;
 
             foreach ($v as $key => $value) {
@@ -26,14 +26,14 @@ final class Classifier
                     $nm['gender'] = $nm['gender'] ?? Term::where('term', $values[$key]['modified'])->where('type', 'N')->first()?->gender;
                 }
                 if ($value === '2') {
-                    $nm['other-names'] = trim($nm['other-names'] . ' ' . $values[$key]['original']);
+                    $nm['middle-name'] = trim($nm['middle-name'] . ' ' . $values[$key]['original']);
                     $nm['gender'] = $nm['gender'] ?? Term::where('term', $values[$key]['modified'])->where('type', 'N')->first()?->gender;
                 }
                 if ($value === '3') {
-                    $nm['last-name'] = trim($nm['last-name'] . ' ' . $values[$key]['original']);
+                    $nm['surname'] = trim($nm['surname'] . ' ' . $values[$key]['original']);
                 }
                 if ($value === '4') {
-                    $nm['other-last-names'] = trim($nm['other-last-names'] . ' ' . $values[$key]['original']);
+                    $nm['other-surnames'] = trim($nm['other-surnames'] . ' ' . $values[$key]['original']);
                 }
             }
         }
