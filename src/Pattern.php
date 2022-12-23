@@ -10,7 +10,7 @@ final class Pattern
 {
     public function get(array $values, array $sustitutions): array
     {
-        $pattern = $this->loadPattern($values);
+        $pattern = implode('', array_column($values, 'type'));
 
         $sustitution = str_replace('Z', 'X', $pattern);
 
@@ -49,13 +49,5 @@ final class Pattern
             $sustitution = $final ?? $sustitution;
         }
         return [$pattern, $sustitution];
-    }
-    private function loadPattern(array $values): string
-    {
-        $pattern = '';
-        foreach ($values as $part) {
-            $pattern .= $part['type'];
-        }
-        return $pattern;
     }
 }
