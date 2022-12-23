@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Micros\Names\App;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Support\Facades\DB;
 use Micros\Names\App\migrations\Load;
 use Micros\Names\App\Models\Lesson;
 use Micros\Names\App\Models\Rule;
@@ -40,20 +39,6 @@ class SplitName
 
         $capsule = new Capsule;
 
-        // https://laracasts.com/discuss/channels/general-discussion/how-to-construct-illuminatedatabase-capsule-with-existing-pdo-connection
-        // $settings = array(
-        //     'driver' => 'mysql',
-        //     'host' => 'localhost',
-        //     'database' => 'database',
-        //     'username' =>'user',
-        //     'password' => 'password',
-        //     'collation' => 'utf8_general_ci',
-        //     'charset'   => 'utf8',
-        //     'strict'   => false,
-        //     'prefix' => '',
-        //     'foreign_key_constraints' => true,
-        // );
-
         /**
          * Default connection
          */
@@ -69,6 +54,7 @@ class SplitName
             fopen($settings['database'], 'w') or die("Can't create file" . $settings['database']);
         }
 
+        // https://laracasts.com/discuss/channels/general-discussion/how-to-construct-illuminatedatabase-capsule-with-existing-pdo-connection
         $capsule->addConnection([
             'driver' => $settings['driver'],
             'database' => $settings['database'],

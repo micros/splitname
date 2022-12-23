@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Micros\Names\App;
 
-use Micros\Names\App\Models\Term;
 use Micros\Names\App\PartCleaner;
-use voku\helper\ASCII;
 
 final class Tagger
 {
