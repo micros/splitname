@@ -47,7 +47,7 @@ class Load
                     $t->gender = $key;
                     $t->type = $k;
                     $t->gender = $gender;
-                    $t->canonical = $term;
+                    $t->canonical = mb_strtolower($term, 'UTF-8') !== $cleanTerm ? mb_strtolower($term, 'UTF-8') : '';
                     $t->save();
                 }
             }

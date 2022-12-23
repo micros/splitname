@@ -7,6 +7,7 @@ namespace Micros\Names\App;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Support\Facades\DB;
 use Micros\Names\App\migrations\Load;
+use Micros\Names\App\Models\Lesson;
 use Micros\Names\App\Models\Rule;
 use Micros\Names\App\Models\Sustitution;
 use Micros\Names\App\Models\Term;
@@ -24,6 +25,7 @@ class SplitName
     public $terms;
     public $rules;
     public $sustitutions;
+    public $lessons;
     public $init = false;
     public function __construct(array $settings = null)
     {
@@ -85,27 +87,20 @@ class SplitName
         $capsule->bootEloquent();
 
         if (!Capsule::schema()->hasTable('terms') || !Capsule::schema()->hasTable('rules') || !Capsule::schema()->hasTable('sustitutions')) {
-            $this->init = true;
-        }
-
-        if ($this->init) {
-            $t = new Load();
-            $t->loadTerms();
-            $t->loadRules();
-            $t->loadSustitutions();
-            $t->loadLessons();
+            $this->init();
         }
 
         $this->terms = Term::get()->toArray();
         $this->rules = Rule::get()->pluck('distribution', 'rule')->toArray();
         $this->sustitutions = Sustitution::get()->pluck('rule', 'origin')->toArray();
+        $this->lessons = Lesson::get()->pluck('type', 'rule')->toArray();
     }
     public function split(string $fullName): array
     {
         $cleanedName = $this->cleaner->clean($fullName);
         $tokenizedName = $this->tokenizer->tokenize($cleanedName);
         $taggedName = $this->tagger->tag($tokenizedName, $this->terms);
-        $compactedName = $this->compacter->compact($taggedName);
+        $compactedName = $this->compacter->compact($taggedName, $this->lessons);
 
         $patterns = $this->pattern->get($compactedName, $this->sustitutions);
 
@@ -128,6 +123,10 @@ class SplitName
     }
     public function init(): void
     {
-        $this->init = true;
+        $t = new Load();
+        $t->loadTerms();
+        $t->loadRules();
+        $t->loadSustitutions();
+        $t->loadLessons();
     }
 }
