@@ -14,7 +14,7 @@ final class Compacter
 
         if (array_key_exists($pattern, $lessons)) {
             foreach ($values as $part) {
-                if ($part['type'] === 'X') {
+                if ($part['type'] === 'X' && !Term::where('term', $part['modified'])->where('type', $lessons[$pattern])->exists()) {
                     $term = new Term();
                     $term->term = $part['modified'];
                     $term->type = $lessons[$pattern];
