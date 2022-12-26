@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Micros\Names\App;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Micros\Names\App\Learn;
 use Micros\Names\App\migrations\Load;
 use Micros\Names\App\Models\Lesson;
 use Micros\Names\App\Models\Rule;
@@ -16,6 +17,7 @@ class SplitName
     private $cleaner;
     private $tokenizer;
     private $tagger;
+    private $learn;
     private $compacter;
     private $classifier;
     private $pattern;
@@ -33,6 +35,7 @@ class SplitName
         $this->tokenizer = new Tokenizer();
         $this->tagger = new Tagger();
         $this->compacter = new Compacter();
+        $this->learn = new Learn();
         $this->classifier = new Classifier();
         $this->pattern = new Pattern();
         $this->genderGuesser = new GenderGuesser();
@@ -72,7 +75,13 @@ class SplitName
 
         $capsule->bootEloquent();
 
-        if (!Capsule::schema()->hasTable('terms') || !Capsule::schema()->hasTable('rules') || !Capsule::schema()->hasTable('sustitutions')) {
+        if (
+            !Capsule::schema()->hasTable('terms') ||
+            !Capsule::schema()->hasTable('rules') ||
+            !Capsule::schema()->hasTable('sustitutions') ||
+            !Capsule::schema()->hasTable('lessons') ||
+            !Capsule::schema()->hasTable('samples')
+        ) {
             $this->init();
         }
 
@@ -86,7 +95,9 @@ class SplitName
         $cleanedName = $this->cleaner->clean($fullName);
         $tokenizedName = $this->tokenizer->tokenize($cleanedName);
         $taggedName = $this->tagger->tag($tokenizedName, $this->terms);
-        $compactedName = $this->compacter->compact($taggedName, $this->lessons);
+        // $sample = $this->learn->create($taggedName, $this->lessons);
+        $sample = null;
+        $compactedName = $this->compacter->compact($taggedName);
 
         $patterns = $this->pattern->get($compactedName, $this->sustitutions);
 
@@ -95,6 +106,11 @@ class SplitName
         if ($classified && !isset($classified['gender'])) {
             $classified['gender'] = $this->genderGuesser->guess($classified);
             $classified['guess-gender'] = true;
+        }
+        // Se complementa el género del nombre
+        if ($sample && $sample->type === 'N' && isset($classified['gender']) && in_array($classified['gender'], ['M', 'F'])) {
+            $sample->gender = $classified['gender'];
+            $sample->save();
         }
 
         $object = [];
@@ -114,5 +130,6 @@ class SplitName
         $t->loadRules();
         $t->loadSustitutions();
         $t->loadLessons();
+        $t->loadSamples();
     }
 }

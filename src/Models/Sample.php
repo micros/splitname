@@ -4,7 +4,7 @@ namespace Micros\Names\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Term extends Model
+class Sample extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,6 @@ class Term extends Model
      * @var array
      */
     protected $fillable = [
-        'term', 'type', 'gender', 'canonical'
+        'term', 'type'
     ];
 }

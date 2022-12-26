@@ -4,27 +4,13 @@ declare(strict_types=1);
 
 namespace Micros\Names\App;
 
+use Micros\Names\App\Models\Sample;
 use Micros\Names\App\Models\Term;
 
 final class Compacter
 {
-    public function compact(array $values, array $lessons): array
+    public function compact(array $values): array
     {
-        $pattern = implode('', array_column($values, 'type'));
-
-        if (array_key_exists($pattern, $lessons)) {
-            foreach ($values as $part) {
-                if ($part['type'] === 'X' && !Term::where('term', $part['modified'])->where('type', $lessons[$pattern])->exists()) {
-                    $term = new Term();
-                    $term->term = $part['modified'];
-                    $term->type = $lessons[$pattern];
-                    $term->gender = 'I';
-                    $term->canonical = mb_strtolower($part['original'], 'UTF-8') !== $part['modified'] ? mb_strtolower($part['original'], 'UTF-8') : '';
-                    $term->save();
-                }
-            }
-        }
-
         $compactables = ['C'];
 
         // if (!array_intersect($compactables, array_column($values, 'type'))) {

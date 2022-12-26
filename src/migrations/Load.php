@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Micros\Names\App\migrations;
 
 use Micros\Names\App\migrations\RulesMigration;
+use Micros\Names\App\migrations\SamplesMigration;
 use Micros\Names\App\migrations\SustitutionsMigration;
 use Micros\Names\App\migrations\TermsMigration;
 use Micros\Names\App\Models\Lesson;
@@ -12,7 +13,6 @@ use Micros\Names\App\Models\Rule;
 use Micros\Names\App\Models\Sustitution;
 use Micros\Names\App\Models\Term;
 use Micros\Names\App\PartCleaner;
-use voku\helper\ASCII;
 
 class Load
 {
@@ -97,5 +97,9 @@ class Load
                 $l->save();
             }
         }
+    }
+    public function loadSamples()
+    {
+        new SamplesMigration();
     }
 }

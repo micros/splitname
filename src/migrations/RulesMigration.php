@@ -10,6 +10,7 @@ class RulesMigration
 {
     public function __construct()
     {
+        Capsule::schema()->dropIfExists('sustitutions');
         Capsule::schema()->dropIfExists('rules');
 
         Capsule::schema()->create('rules', function ($table) {
