@@ -10,7 +10,7 @@ use Micros\Names\App\Models\Term;
 final class Learn
 {
 
-    public function create(array $values, array $lessons): ?Sample
+    public function createSample(array $values, array $lessons): ?Sample
     {
         $pattern = implode('', array_column($values, 'type'));
         $sample = null;

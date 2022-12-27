@@ -95,7 +95,7 @@ class SplitName
         $cleanedName = $this->cleaner->clean($fullName);
         $tokenizedName = $this->tokenizer->tokenize($cleanedName);
         $taggedName = $this->tagger->tag($tokenizedName, $this->terms);
-        $sample = $this->learn->create($taggedName, $this->lessons);
+        $sample = $this->learn->createSample($taggedName, $this->lessons);
         $compactedName = $this->compacter->compact($taggedName);
 
         $patterns = $this->pattern->get($compactedName, $this->sustitutions);
@@ -130,5 +130,10 @@ class SplitName
         $t->loadSustitutions();
         $t->loadLessons();
         $t->loadSamples();
+    }
+    public function process(): void
+    {
+        $report = new ProcessSample();
+        $report->process();
     }
 }

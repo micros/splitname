@@ -44,7 +44,6 @@ class Load
                 if (!Term::where('term', $cleanTerm)->where('type', $k)->exists()) {
                     $t = new Term();
                     $t->term = $cleanTerm;
-                    $t->gender = $key;
                     $t->type = $k;
                     $t->gender = $gender;
                     $t->canonical = mb_strtolower($term, 'UTF-8') !== $cleanTerm ? mb_strtolower($term, 'UTF-8') : '';
