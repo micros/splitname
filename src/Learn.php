@@ -7,7 +7,7 @@ namespace Micros\Names\App;
 use Micros\Names\App\Models\Sample;
 use Micros\Names\App\Models\Term;
 
-final class learn
+final class Learn
 {
 
     public function create(array $values, array $lessons): ?Sample

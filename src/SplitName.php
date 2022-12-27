@@ -106,8 +106,8 @@ class SplitName
             $classified['gender'] = $this->genderGuesser->guess($classified);
             $classified['guess-gender'] = true;
         }
-        // Se complementa el género del nombre
-        if ($sample && $sample->type === 'N' && isset($classified['gender']) && in_array($classified['gender'], ['M', 'F'])) {
+        // Fix gender in learned names
+        if ($sample?->type === 'N' && isset($classified['gender']) && in_array($classified['gender'], ['M', 'F'])) {
             $sample->gender = $classified['gender'];
             $sample->save();
         }
