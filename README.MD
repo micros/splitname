@@ -1,3 +1,28 @@
+
+DESCRIPTION
+===========
+This library allows you to split Spanish names into four main parts:
+
+* First name
+* Middle name
+* Surname
+* Other surnames
+
+In addition, this library tries to identify the gender (female or male)
+
+This library uses its internal term dictionary and its own rules definition. It is capable to learn new terms by its use, which means the more is used the more accurate is the library.
+
+The system cannot learn new rules (only new terms) but this is a feature under development.
+
+Note that if the library is used in many projects, with independent installations, you will get no benefits from the learning capabilities since are different databases. You should sync manually the newly learned terms between databases.
+
+Is advisable to run the system many times against the database to will be clasified in order to let the system to learn new terms which improve the precision.
+
+The system can handle unknow names and surnames but has no being tested with non-Spanish names.
+
+Please use under your own risk and read carefully the licence.
+
+
 DESCRIPCIÓN
 ===========
 Esta librería le permite dividir nombres en español en sus cuatro componentes fundamentales:
@@ -21,15 +46,15 @@ El sistema puede trabajar con nombres y apellidos desconocidos pero no ha sido p
 
 Por favor úselo bajo su propia responsabilidad. El licenciamiento le permite usarlo en cualquier proyecto pero siempre debe dar crédito al autor.
 
-INSTALACIÓN
-===========
+INSTALLATION / INSTALACIÓN
+========================
 
     composer require micros/splitname
 
     php artisan migrate
 
-USO
-===
+HOW TO USE / COMO USAR
+======================
 
     use Micros\Splitname\SplitName;
 
@@ -51,9 +76,11 @@ USO
     ];
 
     foreach ($tests as $test) {
-        dump($splitter->split($test)['classified']);
+        $parts = $splitter->split($test)['classified'];
+        dump($parts);
     }
 
     $splitter->process();
+
 
 
