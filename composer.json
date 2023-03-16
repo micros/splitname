@@ -1,0 +1,30 @@
+{
+    "name": "micros/splitname",
+    "description": "Splits complex names in spanish in four parts",
+    "type": "library",
+    "require": {
+        "voku/portable-ascii": "^2.0",
+        "voku/portable-utf8": "^6.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Micros\\Splitname\\": "src/"
+        }
+    },
+    "authors": [{
+        "name": "Leonardo Forero",
+        "email": "gerencia@micrositios.net"
+    }],
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Micros\\Splitname\\SplitnameServiceProvider"
+            ]
+        }
+    }
+}
