@@ -16,6 +16,9 @@ final class ProcessSample
     }
     public function process(): void
     {
+        // Solución temporal, eliminar nombres sin genero
+        SplitSample::where('type', 'N')->where('gender', null)->delete();
+
         $samples = SplitSample::groupBy(['term', 'type', 'gender', 'canonical'])->selectRaw('term, type, gender, canonical, count(*) as total')->get();
         foreach ($samples as $sample) {
             if ($sample->total >= $this->threshold) {
