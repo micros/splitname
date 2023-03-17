@@ -22,6 +22,7 @@ class Load
     public function loadTerms()
     {
 
+        // Male names
         $terms['M'] = [
             'adrián',
             'alejandro',
@@ -79,6 +80,7 @@ class Load
             'sergio',
         ];
 
+        // Female names
         $terms['F'] = [
             'adriana',
             'agustina',
@@ -139,7 +141,7 @@ class Load
             'verónica',
             'viviana',
         ];
-
+        // Surnames
         $terms['L'] = [
             'alfonso',
             'alonso',
@@ -204,6 +206,7 @@ class Load
             'zuluaga',
         ];
 
+        // Connectors
         $terms['C'] = [
             'de',
             'del',

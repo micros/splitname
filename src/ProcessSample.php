@@ -9,11 +9,16 @@ use Micros\Splitname\Models\SplitTerm;
 
 final class ProcessSample
 {
+    private $threshold;
+    public function __construct(int $threshold)
+    {
+        $this->threshold = $threshold;
+    }
     public function process(): void
     {
         $samples = SplitSample::groupBy(['term', 'type', 'gender', 'canonical'])->selectRaw('term, type, gender, canonical, count(*) as total')->get();
         foreach ($samples as $sample) {
-            if ($sample->total > 1) {
+            if ($sample->total >= $this->threshold) {
                 if (!SplitTerm::where('term', $sample->term)->where('type', $sample->type)->exists()) {
                     $term = new SplitTerm();
                     $term->term = $sample->term;

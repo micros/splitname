@@ -20,6 +20,7 @@ use Micros\Splitname\Tokenizer;
 
 class SplitName
 {
+    private $threshold = 3;
     private $cleaner;
     private $tokenizer;
     private $tagger;
@@ -94,7 +95,12 @@ class SplitName
     }
     public function process(): void
     {
-        $report = new ProcessSample();
+        $report = new ProcessSample($this->threshold);
         $report->process();
+    }
+    public function setThreshold(int $threshold): SplitName
+    {
+        $this->threshold = $threshold;
+        return $this;
     }
 }

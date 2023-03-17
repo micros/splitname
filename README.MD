@@ -61,8 +61,6 @@ HOW TO USE / COMO USAR
 
     $splitter = new SplitName();
 
-    $splitter->init();
-
     $tests = [
         'Leonardo Forero Sandoval',
         'Díaz Duran, Adriana',
