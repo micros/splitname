@@ -1,6 +1,6 @@
 {
     "name": "micros/splitname",
-    "description": "Splits complex names in spanish in four parts",
+    "description": "library for Laravel 10 and up, allows you to split Spanish names into four main parts",
     "type": "library",
     "require": {
         "voku/portable-ascii": "^2.0",
