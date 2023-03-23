@@ -2,7 +2,7 @@
 
 DESCRIPTION
 ===========
-This library allows you to split Spanish names into four main parts:
+This library for Laravel 10 and up, allows you to split Spanish names into four main parts:
 
 * First name
 * Middle name
@@ -26,7 +26,7 @@ Please use under your own risk and read carefully the licence.
 
 DESCRIPCIÓN
 ===========
-Esta librería le permite dividir nombres en español en sus cuatro componentes fundamentales:
+Esta librería para Laravel 10 y superior, le permite dividir nombres en español en sus cuatro componentes fundamentales:
 
 * Primer nombre
 * Otros nombres
