@@ -14,4 +14,8 @@ class SplitRule extends Model
     protected $fillable = [
         'rule', 'distribution'
     ];
+    /**
+     * Enables microseconds.
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 }

@@ -14,4 +14,8 @@ class SplitTerm extends Model
     protected $fillable = [
         'term', 'type', 'gender', 'canonical'
     ];
+    /**
+     * Enables microseconds.
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 }

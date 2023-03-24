@@ -16,7 +16,7 @@ final class ProcessSample
     }
     public function process(): void
     {
-        // Solución temporal, eliminar nombres sin genero
+        // Temporary solution. Remove ungendered samples
         SplitSample::where('type', 'N')->where('gender', null)->delete();
 
         $samples = SplitSample::groupBy(['term', 'type', 'gender', 'canonical'])->selectRaw('term, type, gender, canonical, count(*) as total')->get();
@@ -34,5 +34,7 @@ final class ProcessSample
                 }
             }
         }
+        // Remove all samples
+        SplitSample::truncate();
     }
 }

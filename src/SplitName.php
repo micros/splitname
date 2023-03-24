@@ -86,12 +86,14 @@ class SplitName
     }
     public function init(): void
     {
-        $t = new Load();
-        $t->loadTerms();
-        $t->loadRules();
-        $t->loadSustitutions();
-        $t->loadLessons();
-        $t->loadSamples();
+        if (!SplitTerm::count() || !SplitRule::count()) {
+            $t = new Load();
+            $t->loadTerms();
+            $t->loadRules();
+            $t->loadSustitutions();
+            $t->loadLessons();
+            $t->loadSamples();
+        }
     }
     public function process(): void
     {

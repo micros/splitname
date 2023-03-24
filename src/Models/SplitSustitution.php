@@ -14,4 +14,8 @@ class SplitSustitution extends Model
     protected $fillable = [
         'origin', 'rule'
     ];
+    /**
+     * Enables microseconds.
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 }

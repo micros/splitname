@@ -14,4 +14,8 @@ class SplitLesson extends Model
     protected $fillable = [
         'rule', 'type'
     ];
+    /**
+     * Enables microseconds.
+     */
+    protected $dateFormat = 'Y-m-d H:i:s.u';
 }
