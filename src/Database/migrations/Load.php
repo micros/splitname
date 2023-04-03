@@ -778,6 +778,7 @@ class Load
             'cordero',
             'cordoba',
             'coronado',
+            'coronel',
             'corrales',
             'correa',
             'corredor',
@@ -1381,7 +1382,6 @@ class Load
         // Connectors
         $terms['C'] = [
             'cdte',
-            'coronel',
             'ct',
             'dc',
             'de',
