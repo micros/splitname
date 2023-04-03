@@ -69,7 +69,7 @@ HOW TO USE / COMO USAR
         'Cornelio Judas Tadeo de Saavedra y Rodríguez.',
         'Bernardino de la Trinidad González de Rivadavia y Rodríguez de Rivadavia.',
         'Francisco José de Paula Santander Omaña',
-        'Simón de la Santísima Trinidad Bolívar Ponte',
+        'Simón José Antonio de la Santísima Trinidad Bolívar Ponte y Palacios Blanco',
         'delcy gomez viuda de rodriguez',
         'Carmen Herrera García Vda. de López',
     ];
